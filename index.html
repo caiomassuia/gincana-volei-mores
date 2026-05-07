@@ -341,6 +341,64 @@ select { cursor: pointer; appearance: none; }
 .empty .ei { font-size:2.5rem; margin-bottom:0.6rem; }
 .empty p { font-family:'Barlow Condensed',sans-serif; font-size:1rem; letter-spacing:1px; }
 
+/* SET SCORES IN BRACKET */
+.b-sets-line {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.2rem; flex-wrap: wrap;
+  padding: 0.3rem 0.7rem;
+  background: var(--card2); border-top: 1px solid var(--border);
+}
+.b-set-chip {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700;
+  padding: 0.1rem 0.45rem; border-radius: 4px;
+  background: var(--card); border: 1px solid var(--border); color: var(--muted);
+}
+.b-set-chip.wa { color: var(--gold); border-color: rgba(255,184,0,0.3); }
+.b-set-chip.wb { color: #b0b8c8; border-color: rgba(180,180,190,0.25); }
+.b-set-sep { color: var(--border); font-size: 0.7rem; }
+
+/* STATS */
+.stats-section {
+  margin-top: 2.5rem; padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.stats-title {
+  font-family: 'Anton', sans-serif; font-size: 1.1rem;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--muted); text-align: center; margin-bottom: 1.2rem;
+}
+.stats-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--card); border-radius: 10px; overflow: hidden;
+}
+.stats-table th {
+  background: var(--card2); padding: 0.7rem 1rem;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); text-align: center;
+}
+.stats-table th:first-child { text-align: left; }
+.stats-table td {
+  padding: 0.8rem 1rem; border-top: 1px solid var(--border);
+  text-align: center;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 600;
+}
+.stats-table td:first-child { text-align: left; }
+.stats-table tr:hover td { background: var(--card2); }
+.stats-rank { display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:5px; font-family:'Anton',sans-serif;
+  font-size:0.82rem; margin-right:0.4rem; }
+.sr1 { background:linear-gradient(135deg,#FFB800,#e07b00); color:#000; }
+.sr2 { background:#2a2418; color:#8a7050; }
+.sr3 { background:#1a1510; color:#5a4830; }
+.sr4 { background:var(--card2); color:var(--muted); }
+.stat-pts  { color: var(--gold); font-family:'Anton',sans-serif; font-size:1.05rem; }
+.stat-win  { color: var(--green); }
+.stat-loss { color: #f87171; }
+.stat-bar-wrap { display:inline-block; width:80px; height:6px;
+  background:var(--card2); border-radius:3px; overflow:hidden; vertical-align:middle; margin-left:0.4rem; }
+.stat-bar { height:100%; border-radius:3px; background:var(--gold); transition:width 0.5s ease; }
+
 /* PODIUM */
 .podium-section {
   margin-top: 2.5rem;
@@ -425,7 +483,7 @@ select { cursor: pointer; appearance: none; }
     <h1>Vôlei Mores</h1>
     <span class="logo-icon">🦁</span>
   </div>
-  <p class="subtitle">Gincana · Chaveamento · Sorteio</p>
+  <p class="subtitle">Gincana de Vôlei</p>
   <div class="header-slash"></div>
 </header>
 
@@ -493,6 +551,7 @@ select { cursor: pointer; appearance: none; }
     <div class="bracket-wrap"><div id="bView"></div></div>
     <div id="champDiv"></div>
     <div id="podiumDiv"></div>
+    <div id="statsDiv"></div>
   </div>
 </div>
 
@@ -635,6 +694,7 @@ function randomBracket(){
 }
 function resetBracket(){
   bracket={seeded:false,slots:[null,null,null,null],sf1:mkM(),sf2:mkM(),final:mkM(),third:mkM()};
+  document.getElementById('statsDiv').innerHTML='';
   renderBracket();
 }
 
@@ -713,9 +773,19 @@ function renderBracket(){
     const done=m.status==='done', live=m.status==='live';
     const show=done||live;
     const wA=done&&sA>sB, wB=done&&sB>sA;
+
+    // Set scores line  (e.g.  25–20  |  18–25  |  15–8)
+    const setsLine = m.sets.length
+      ? `<div class="b-sets-line">
+          ${m.sets.map((s,i)=>`
+            <span class="b-set-chip ${s[0]>s[1]?'wa':s[1]>s[0]?'wb':''}">${s[0]}–${s[1]}</span>
+            ${i<m.sets.length-1?'<span class="b-set-sep">·</span>':''}`).join('')}
+        </div>` : '';
+
     return `<div class="b-match ${isFin?'final-match':''}">
       ${tRow(tA, show?sA:null, wA, !tA)}
       ${tRow(tB, show?sB:null, wB, !tB)}
+      ${setsLine}
       ${bCtrl(key, tA, tB)}
     </div>`;
   }
@@ -760,6 +830,7 @@ function renderBracket(){
   } else { cd.innerHTML=''; }
 
   renderPodium(wFin, w3, wSF1, wSF2, lSF1, lSF2);
+  renderStats(tA1, tB1, tA2, tB2);
 }
 
 function startBM(k){ bracket[k].status='live'; renderBracket(); }
@@ -916,6 +987,93 @@ function toast(msg,type='ok'){
   });
   document.body.appendChild(el);
   setTimeout(()=>{el.style.opacity='0';setTimeout(()=>el.remove(),300);},2300);
+}
+
+// ═══════════════════ ESTATÍSTICAS ═══════════════════
+function renderStats(tA1, tB1, tA2, tB2){
+  const div = document.getElementById('statsDiv');
+  const allMatches = [
+    { key:'sf1',   tA: tA1, tB: tB1 },
+    { key:'sf2',   tA: tA2, tB: tB2 },
+    { key:'final', tA: null, tB: null },  // resolved below
+    { key:'third', tA: null, tB: null },
+  ];
+
+  // Rebuild actual teams for final & third from bracket state
+  const wSF1 = bWinTeam('sf1', tA1, tB1);
+  const wSF2 = bWinTeam('sf2', tA2, tB2);
+  const lSF1 = bLoseTeam('sf1', tA1, tB1);
+  const lSF2 = bLoseTeam('sf2', tA2, tB2);
+  allMatches[2].tA = wSF1; allMatches[2].tB = wSF2;
+  allMatches[3].tA = lSF1; allMatches[3].tB = lSF2;
+
+  // Build stats per team
+  const statsMap = new Map();
+  teams.forEach(t => statsMap.set(t, { team:t, pts:0, wins:0, losses:0, setsW:0, setsL:0 }));
+
+  allMatches.forEach(({ key, tA, tB }) => {
+    const m = bracket[key];
+    if(m.status !== 'done' || !tA || !tB) return;
+    const [wA, wB] = sCnt(m);
+
+    // Total points (sum of all individual set scores)
+    let ptsA = 0, ptsB = 0;
+    m.sets.forEach(s => { ptsA += s[0]; ptsB += s[1]; });
+
+    const sA = statsMap.get(tA);
+    const sB = statsMap.get(tB);
+    if(!sA || !sB) return;
+
+    sA.pts += ptsA; sB.pts += ptsB;
+    sA.setsW += wA; sA.setsL += wB;
+    sB.setsW += wB; sB.setsL += wA;
+
+    if(wA > wB)     { sA.wins++; sB.losses++; }
+    else if(wB > wA){ sB.wins++; sA.losses++; }
+  });
+
+  const rows = [...statsMap.values()].sort((a,b) =>
+    b.wins - a.wins || b.setsW - b.setsL - (a.setsW - a.setsL) || b.pts - a.pts
+  );
+
+  const maxPts = Math.max(...rows.map(r=>r.pts), 1);
+
+  const rankClass = ['sr1','sr2','sr3','sr4'];
+
+  div.innerHTML = `
+    <div class="stats-section">
+      <div class="stats-title">— Estatísticas —</div>
+      <table class="stats-table">
+        <thead><tr>
+          <th>#</th>
+          <th>Time</th>
+          <th title="Vitórias">V</th>
+          <th title="Derrotas">D</th>
+          <th title="Sets vencidos">Sets V</th>
+          <th title="Total de pontos marcados">Pontos</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map((r,i) => `
+            <tr>
+              <td><span class="stats-rank ${rankClass[i]||'sr4'}">${i+1}</span></td>
+              <td>
+                <span style="display:inline-block;width:9px;height:9px;border-radius:50%;
+                  background:${r.team.color};margin-right:5px;vertical-align:middle"></span>
+                <strong>${r.team.name}</strong>
+              </td>
+              <td class="stat-win">${r.wins}</td>
+              <td class="stat-loss">${r.losses}</td>
+              <td>${r.setsW}<span style="color:var(--muted);font-size:0.8em"> / ${r.setsW+r.setsL}</span></td>
+              <td class="stat-pts">
+                ${r.pts}
+                <span class="stat-bar-wrap">
+                  <span class="stat-bar" style="width:${Math.round(r.pts/maxPts*100)}%;background:${r.team.color}"></span>
+                </span>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
 }
 
 // ═══════════════════ PÓDIO ═══════════════════
