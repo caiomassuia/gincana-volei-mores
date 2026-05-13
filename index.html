@@ -152,16 +152,22 @@ select{cursor:pointer;appearance:none;}
 /* ════ CHAVEAMENTO ════ */
 .bracket-hint{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:1px;color:var(--muted);text-align:center;margin-bottom:.8rem;}
 .bracket-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.5rem;margin:0 -.75rem;padding-left:.75rem;padding-right:.75rem;}
-.bracket{display:flex;align-items:stretch;min-width:480px;gap:0;}
+.bracket{display:flex;align-items:stretch;min-width:520px;gap:0;}
 .b-round{display:flex;flex-direction:column;flex:1;padding:0 .4rem;}
 .b-round-title{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:.9rem;}
 .b-col{display:flex;flex-direction:column;gap:1.2rem;flex:1;}
 .b-group-label{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem;}
 .b-group-label.gold{color:var(--gold);}
+.b-conn{display:flex;flex-direction:column;justify-content:space-around;width:18px;align-self:stretch;}
+.b-conn-t{flex:1;border-right:2px solid var(--border);border-bottom:2px solid var(--border);border-radius:0 0 4px 0;}
+.b-conn-b{flex:1;border-right:2px solid var(--border);border-top:2px solid var(--border);border-radius:0 4px 0 0;}
 
-.b-match{background:var(--card);border:1px solid var(--border);border-radius:9px;overflow:hidden;}
+/* Match card */
+.b-match{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
 .b-match.final-match{border-color:rgba(255,184,0,.4);box-shadow:0 0 16px rgba(255,184,0,.1);}
-.b-team{display:flex;align-items:center;padding:.5rem .75rem;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;gap:.45rem;}
+
+/* Match internals */
+.b-team{display:flex;align-items:center;padding:.55rem .75rem;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;gap:.45rem;}
 .b-team+.b-team{border-top:1px solid var(--border);}
 .b-tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .b-tname{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -170,39 +176,26 @@ select{cursor:pointer;appearance:none;}
 .b-team.bwinner .b-tname{color:var(--gold);}
 .b-team.btbd .b-tname{color:var(--muted);font-style:italic;font-weight:400;}
 
-/* Bracket controls — big touch-friendly */
+/* Controls */
 .b-ctrl-wrap{border-top:1px solid var(--border);background:var(--card2);}
 .b-ctrl-top{display:flex;align-items:center;justify-content:space-between;padding:.35rem .75rem .2rem;}
-.b-ctrl-main{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.3rem .5rem .45rem;flex-wrap:wrap;}
-.live-badge{display:inline-flex;align-items:center;gap:3px;font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ff6060;padding:.1rem .45rem;background:rgba(230,48,48,.15);border-radius:20px;border:1px solid rgba(230,48,48,.3);}
+.b-ctrl-main{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.3rem .5rem .4rem;flex-wrap:wrap;}
+.live-badge{display:inline-flex;align-items:center;gap:3px;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ff6060;padding:.1rem .45rem;background:rgba(230,48,48,.15);border-radius:20px;border:1px solid rgba(230,48,48,.3);}
 .live-dot{width:5px;height:5px;border-radius:50%;background:#ff6060;animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .btimer{font-family:'Anton',sans-serif;font-size:.8rem;color:var(--muted);letter-spacing:1px;}
-
-/* Large score buttons in bracket */
 .bsc-group{display:flex;align-items:center;gap:.3rem;}
-.bsc-btn{
-  width:38px;height:38px;border-radius:8px;border:none;cursor:pointer;
-  font-size:1.15rem;font-weight:900;display:flex;align-items:center;justify-content:center;
-  transition:transform .1s;
-}
-.bsc-btn:active{transform:scale(.9);}
+.bsc-btn{width:42px;height:42px;border-radius:8px;border:none;cursor:pointer;font-size:1.2rem;font-weight:900;display:flex;align-items:center;justify-content:center;transition:transform .1s;}
+.bsc-btn:active{transform:scale(.88);}
 .bsc-plus{background:var(--gold);color:#000;}
 .bsc-minus{background:var(--card);color:var(--muted);border:1px solid var(--border);}
-.b-live-num{font-family:'Anton',sans-serif;font-size:1.5rem;min-width:26px;text-align:center;}
+.b-live-num{font-family:'Anton',sans-serif;font-size:1.6rem;min-width:28px;text-align:center;}
 .b-vs-sep{font-family:'Anton',sans-serif;font-size:.85rem;color:var(--muted);}
-
-/* Set chips with time */
-.b-sets-row{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;padding:.3rem .6rem .2rem;}
-.b-set-chip{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;padding:.08rem .4rem;border-radius:4px;background:var(--card);border:1px solid var(--border);color:var(--muted);}
+.b-sets-row{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:.3rem .6rem .25rem;}
+.b-set-chip{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;padding:.1rem .45rem;border-radius:4px;background:var(--card);border:1px solid var(--border);color:var(--muted);}
 .b-set-chip.wa{color:var(--gold);border-color:rgba(255,184,0,.3);}
 .b-set-chip.wb{color:#9ca3af;border-color:rgba(156,163,175,.3);}
-.b-set-time{font-size:.55rem;opacity:.6;margin-left:1px;}
-
-/* connector */
-.b-conn{display:flex;flex-direction:column;justify-content:space-around;width:18px;align-self:stretch;}
-.b-conn-t{flex:1;border-right:2px solid var(--border);border-bottom:2px solid var(--border);border-radius:0 0 4px 0;}
-.b-conn-b{flex:1;border-right:2px solid var(--border);border-top:2px solid var(--border);border-radius:0 4px 0 0;}
+.b-set-time{font-size:.55rem;opacity:.65;margin-left:2px;}
 
 /* champion */
 .champion-box{text-align:center;padding:1.6rem 1rem;background:linear-gradient(135deg,rgba(255,184,0,.1),rgba(224,123,0,.06));border:1px solid rgba(255,184,0,.25);border-radius:12px;margin-top:1.3rem;}
@@ -589,13 +582,13 @@ function renderBracket(){
       <div class="b-ctrl-main">
         <div class="bsc-group">
           <button class="bsc-btn bsc-minus" onclick="bSc('${key}','A',-1)">−</button>
-          <span class="b-live-num score-el" style="color:${tA.color}">${m.scoreA}</span>
+          <span id="bsc-${key}-A" class="b-live-num score-el" style="color:${tA.color}">${m.scoreA}</span>
           <button class="bsc-btn bsc-plus"  onclick="bSc('${key}','A', 1)">+</button>
         </div>
         <span class="b-vs-sep">:</span>
         <div class="bsc-group">
           <button class="bsc-btn bsc-minus" onclick="bSc('${key}','B',-1)">−</button>
-          <span class="b-live-num score-el" style="color:${tB.color}">${m.scoreB}</span>
+          <span id="bsc-${key}-B" class="b-live-num score-el" style="color:${tB.color}">${m.scoreB}</span>
           <button class="bsc-btn bsc-plus"  onclick="bSc('${key}','B', 1)">+</button>
         </div>
       </div>
@@ -646,7 +639,6 @@ function renderBracket(){
       <div class="ch-trophy">🏆</div>
       <div class="ch-label">Campeão da Gincana</div>
       <div class="ch-name" style="color:${wFin.color}">${wFin.name}</div>
-      ${w3?`<div class="ch-third">🥉 3° lugar: <strong style="color:var(--white)">${w3.name}</strong></div>`:''}
     </div>`;
   } else { cd.innerHTML=''; }
 
@@ -665,11 +657,15 @@ function bSc(k,side,d){
   const m=bracket[k]; if(m.status!=='live') return;
   if(side==='A') m.scoreA=Math.max(0,m.scoreA+d);
   else           m.scoreB=Math.max(0,m.scoreB+d);
-  renderBracket();
-  // flash
-  document.querySelectorAll('.score-el').forEach(el=>{
-    el.classList.remove('score-flash'); void el.offsetWidth; el.classList.add('score-flash');
-  });
+
+  // Atualiza só o número no DOM, sem re-renderizar o bracket inteiro
+  const el=document.getElementById('bsc-'+k+'-'+side);
+  if(el){
+    el.textContent=side==='A'?m.scoreA:m.scoreB;
+    el.classList.remove('score-flash');
+    void el.offsetWidth;
+    el.classList.add('score-flash');
+  }
 }
 
 function bCloseSet(k){
